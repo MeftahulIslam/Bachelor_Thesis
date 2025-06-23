@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %} Profile Page {% endblock %}
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="profile-heading">Your Profile</h1>
+    <div class="profile-details">
+      <p>First Name: {{ user.firstname }}</p>
+      <p>Last Name: {{ user.lastname }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>
+        Open Api Key: 
+        <span id="apiKeyDisplay">{{ user.api_key }}</span>
+        <span aria-hidden="true" class="edit">
+          <button type="button" class="btn btn-sm btn-outline-primary" onclick="editApiKey()">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </span>
+      </p>
+      
+      <!-- Editable API Key Field (Initially Hidden) -->
+      <div id="apiKeyEditField" style="display: none;">
+        <input type="text" class="form-control" id="editApiKeyInput">
+        <button type="button" class="btn btn-sm btn-outline-success mt-2" onclick="saveEditedApiKey()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,18 @@
+FROM ubuntu:latest 
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update -y && apt install -y python3 python3-pip 
+RUN pip install flask requests flask-login flask-sqlalchemy pytz python-magic openai==0.28 colorama numpy pandas scikit-learn
+RUN apt install -y ethtool gnupg1 wget default-jre default-jdk libpcap-dev
+RUN apt-get update -y && apt-get upgrade -y 
+RUN apt-get install -y cmake make gcc g++ flex bison libssl-dev python2-dev swig zlib1g-dev libmagic-dev
+RUN wget -nv https://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/Release.key -O Release.key
+RUN apt-key add -< Release.key
+RUN apt-get update
+RUN sh -c "echo 'deb http://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/ /' > /etc/apt/sources.list.d/security:zeek.list"
+RUN apt-get update
+RUN RUN echo '1' | apt-get install -y zeek-lts
+#RUN export JAVA_OPTS="-Xms2G -Xmx4G"
+ENV PATH="/opt/zeek/bin:$PATH"
+#ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
+#ENV JAVA_OPTS="-Xms2G -Xmx4G"
+CMD python3 /opt/app/main.py

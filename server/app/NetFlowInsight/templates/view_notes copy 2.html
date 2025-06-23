@@ -1,0 +1,91 @@
+{% extends "base.html" %} 
+{% block title %} View Notes {% endblock %}
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="notes-heading">Your Notes</h1>
+    <ul class="list-group list-group-flush" id="note">
+      {% for note in user.note %}
+      <li class="list-group-item" data-note-id="{{ note.id }}">
+        <span class="note-display">{{ note.note }}</span>
+        <br>
+        <span class="date">{{ note.date.strftime("%Y-%m-%d %H:%M") }}</span>
+        <span aria-hidden="true" class="edit">
+          <button type="button" class="btn btn-sm btn-outline-primary" onclick="editNote('{{ note.id }}')">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+        </span>
+        <div class="note-edit-field" style="display: none;">
+          <input type="text" class="form-control edit-note-input">
+          <button type="button" class="btn btn-sm btn-outline-success mt-2" onclick="saveEditedNote('{{ note.id }}')">
+            Save
+          </button>
+        </div>
+        <button type="button" class="close" style="margin-right: 8%;" onClick="deleteNote('{{ note.id }}')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <br>
+  <br>
+  <div class="container mt-5">
+    <form method="POST">
+      <div class="form-group">
+        <textarea name="note" id="note" class="form-control" placeholder="Add a new note"></textarea>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Add Note</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function editNote(noteID) {
+      const listItem = document.querySelector(`[data-note-id='${noteID}']`);
+      const noteDisplay = listItem.querySelector('.note-display');
+      const noteEditField = listItem.querySelector('.note-edit-field');
+      const editNoteInput = listItem.querySelector('.edit-note-input');
+
+      editNoteInput.value = noteDisplay.textContent;
+
+      noteDisplay.style.display = 'none';
+      noteEditField.style.display = 'block';
+    }
+
+    function saveEditedNote(noteID) {
+      const listItem = document.querySelector(`[data-note-id='${noteID}']`);
+      const noteDisplay = listItem.querySelector('.note-display');
+      const noteEditField = listItem.querySelector('.note-edit-field');
+      const editNoteInput = listItem.querySelector('.edit-note-input');
+
+      noteDisplay.textContent = editNoteInput.value;
+
+      noteDisplay.style.display = 'inline';
+      noteEditField.style.display = 'none';
+
+      const url = '/update_notes';
+      const editedNote = editNoteInput.value;
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ note: editedNote, note_id: noteID }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Response from Flask:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function deleteNote(noteID) {
+      // Add your delete note functionality here
+      // You can send a request to delete the note using the noteID
+    }
+  </script>
+{% endblock %}

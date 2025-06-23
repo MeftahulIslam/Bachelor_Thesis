@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %} Signup {% endblock %}
+{% block content %}
+    <form method="POST">
+        <h3 align="center"> Sign up </h3>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" 
+            {% if request.form.email %}
+                value="{{request.form.email}}"
+            {% else %}
+                placeholder="Enter Email Address" 
+            {% endif %}
+            required/>
+        </div>
+        <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input type="text" class="form-control" id="firstname" name="firstname" 
+            {% if request.form.firstname %}
+                value="{{request.form.firstname}}"
+            {% else %}
+                placeholder="Enter First Name" 
+            {% endif %}
+            required/>
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" class="form-control" id="lastname" name="lastname" 
+            {% if request.form.lastname %}
+                value="{{request.form.lastname}}"
+            {% else %}
+                placeholder="Enter Last Name" 
+            {% endif %}
+            required/>
+        </div>
+        <div class="form-group">
+            <label for="password1">Password</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password1" name="password1"
+                {% if request.form.password1 %}
+                    value="{{request.form.password1}}"
+                {% else %}
+                    placeholder="Enter Password" 
+                {% endif %}
+                required/>
+                <label class="toggle-eye" for="password1-toggle">
+                    <input type="checkbox" id="password1-toggle" onclick="toggle_password_visibility('password1')">
+                    <i class="fas fa-eye"></i>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password2" name="password2" 
+                {% if request.form.password2 %}
+                    value="{{request.form.password2}}"
+                {% else %}
+                    placeholder="Enter Password" 
+                {% endif %}
+                required/>
+                <label class="toggle-eye" for="password2-toggle">
+                    <input type="checkbox" id="password2-toggle" onclick="toggle_password_visibility('password2')">
+                    <i class="fas fa-eye"></i>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">OpenAi API Key</label>
+            <input type="text" class="form-control" id="api_key" name="api_key" 
+            {% if request.form.api_key %}
+                value="{{request.form.api_key}}"
+            {% else %}
+                placeholder="Your OpenAi API Key" 
+            {% endif %}
+            required/>
+        </div>
+        
+        <br>
+        <h3 align="center"><button type="Submit" class="btn btn-primary">Submit</button></h3>
+    </form>
+
+{% endblock %}
+

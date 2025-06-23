@@ -1,0 +1,68 @@
+{% extends "base.html" %} 
+{% block title %} File Analysis Results {% endblock %}
+{% block content %}
+<div class="container-fluid mt-5 d-flex justify-content-center align-items-center" style="width:fit-content;">
+  <div class="text-center">
+    <h1>Your File Analysis Results</h1>
+    <table class="table table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Pcap File</th>
+          <th>Date Uploaded</th>
+          <th>Log Analysis</th>
+          <th>Extracted File Hash</th>
+          <th>File Type</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in user.pcap_loc %}
+          {% if file.log_analysis %}
+            {% for index in range(file.log_analysis|length) %}
+              {% set log_analysis = file.log_analysis[index] %}
+              {% set file_analysis = file.file_analysis[index] %}
+              {% if file_analysis.path.startswith("No") %}
+                <tr>
+                  <td>{{ file.filename }}</td>
+                  <td>
+                    <div style="width:fit-content;">
+                      <pre>{{ log_analysis.result }}</pre>
+                    </div>
+                  </td>
+                  <td>{{ file.date.strftime("%Y-%m-%d  %H:%M") }}</td>
+                  <td colspan="3">No Files Detected in the Pcap File!</td>
+                </tr>
+              {% else %}
+                {% for file_result in file_analysis.file_result %}
+                  <tr>
+                    {% if loop.index == 1 %}
+                      <td 
+                        rowspan="{{ file_analysis.file_result|length }}">{{ file.filename }}
+                      </td>
+                      <td rowspan="{{ file_analysis.file_result|length }}">{{ file.date.strftime("%Y-%m-%d  %H:%M") }}</td>
+                      <td rowspan="{{ file_analysis.file_result|length }}">
+                        <div style="width:200px;">
+                          <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ log_analysis.result }}</pre>
+                        </div>
+                      </td>
+                    {% endif %}
+                    <td><a href="/download/{{file_result.filepath}}"> {{file_result.filename }}</a></td>
+                    <td>{{ file_result.extension_type }}</td>
+                    <td>
+                      <div id="resultDiv" style="width: 300px;">
+                        <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ file_result.result }}</pre>
+                    </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+{% endblock %}

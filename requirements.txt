@@ -1,0 +1,6 @@
+flask, sqlalchemy, pytz
+requests colorama
+
+apt install ethtool
+apt install gnupg1
+apt install wget
